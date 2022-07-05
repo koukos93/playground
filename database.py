@@ -10,10 +10,11 @@ def insert_car():
     """
     conn = sqlite3.connect("Cars.db")
     cursor = conn.cursor()
+    time_now = dt.datetime.now().strftime("%Y-%m-%d %H:%M")
 
     #get user input and insert record
-    enter_input = input("enter plate to enter in garage")
-    cursor.execute(f'INSERT INTO customers VALUES ("{enter_input}", "{dt.datetime.now().strftime("%Y-%m-%d %H:%M")}")')
+    plate_num = input("enter plate to enter in garage")
+    cursor.execute(f'INSERT INTO customers VALUES ("{plate_num}", "{time_now}")')
     conn.commit()
     conn.close()
     return None
