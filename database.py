@@ -30,13 +30,10 @@ def fetch_in_time_car():
 
 # time elapsed from time_in and current time.
 difference = dt.datetime.now() - fetch_in_time_car()
-minutes_difference = int(difference.total_seconds() / 60)
-print(minutes_difference)
+time_dif_in_minutes = int(difference.total_seconds() / 60)
+print(time_dif_in_minutes)
 
 # TODO print price depending on minutes stayed.
-
-
-
 
 
 # for count, value in enumerate(items):
