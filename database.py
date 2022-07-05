@@ -16,21 +16,20 @@ cursor = conn.cursor()
 # Function to fetch record from database based on user input
 
 def fetch_in_time_car():
-    user_input = input("enter plate to exit:")
-    cursor.execute(f'SELECT * FROM customers WHERE plate_number = "{user_input}"')
+    car_plate = input("enter plate to exit:")
+    cursor.execute(f'SELECT * FROM customers WHERE plate_number = "{car_plate}"')
 
     items = cursor.fetchone()
     print(items)
     # print(type(items[0][1]))
     # getting the time from database(string) and
     # converting it to datetime object to be able to compare with current time
-    time = dt.datetime.strptime(items[1], "%Y-%m-%d %H:%M")
-    return time
-
+    time_in = dt.datetime.strptime(items[1], "%Y-%m-%d %H:%M")
+    return time_in
 
 
 # time elapsed from time_in and current time.
-difference = dt.datetime.now() - time
+difference = dt.datetime.now() - fetch_in_time_car()
 minutes_difference = int(difference.total_seconds() / 60)
 print(minutes_difference)
 

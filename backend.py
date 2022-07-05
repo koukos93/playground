@@ -14,7 +14,7 @@ class Car:
 
 def find_time_stayed(time1):
     """Takes one instance of time and returns the difference from
-    the current time"""
+    the current time in minutes"""
     time2 = datetime.now().strftime("%H:%M")
     FMT = "%H:%M"
     time_passed = datetime.strptime(time2, FMT) - datetime.strptime(time1, FMT)
