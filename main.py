@@ -41,7 +41,7 @@ def delete_car_from_db():
 
 def exit_car_from_garage():
     """
-    Query the database based on user input
+    Query the database based on user input and show time stayed and price
 
     :return: None
     """
@@ -60,9 +60,9 @@ def exit_car_from_garage():
     time_dif_in_minutes = int(difference.total_seconds() / 60)
     # calculating the time stayed and price and display to the user
     hours, minutes = divmod(time_dif_in_minutes, 60)
-    tkinter.messagebox.showinfo(title="Χρονος Παραμονης",
-                                message=f"{hours}ω και {minutes}λ\n"
-                                        f"Χρεωση: {parking_fee(time_dif_in_minutes)}")
+    tkinter.messagebox.showinfo(title="Time Stayed",
+                                message=f"{hours}h και {minutes}m\n"
+                                        f"Charge: {parking_fee(time_dif_in_minutes)}")
 
     conn.commit()
     conn.close()
