@@ -39,7 +39,7 @@ def delete_car_from_db():
     return None
 
 
-def exit_car_from_garage():
+def display_time_price():
     """
     Query the database based on user input and show time stayed and price
 
@@ -125,7 +125,7 @@ entry_box = Entry()
 entry_box.pack()
 enter_button = Button(text="Entry", command=insert_car)
 exit_entry = Entry()
-exit_button = Button(text="Exit", command=lambda: [exit_car_from_garage(),
+exit_button = Button(text="Exit", command=lambda: [display_time_price(),
                                                    delete_car_from_db()])
 enter_button.pack()
 exit_entry.pack()
