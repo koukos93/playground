@@ -69,7 +69,7 @@ def display_time_price():
     return None
 
 
-def parking_fee(difference_minutes):
+def parking_fee(minutes_parked):
     """
     Calculates the parking cost\n
     Rules:\n
@@ -79,7 +79,7 @@ def parking_fee(difference_minutes):
     We don't charge the first 10 minutes of the hours (except the first hour)\n
     Up to 15 minutes charge: +1$ (except first hour)
 
-    :param difference_minutes: int
+    :param minutes_parked: int
 
     :return: Cost of parking -- int
     """
@@ -90,8 +90,8 @@ def parking_fee(difference_minutes):
     fee = minimum_fee
     # if time stayed less than 15 minutes then price is minimum price of 3$
 
-    if difference_minutes > 15:
-        hours, minutes = divmod(difference_minutes, 60)
+    if minutes_parked > 15:
+        hours, minutes = divmod(minutes_parked, 60)
         # Variable to subtract the first hour that we already charged and multiply other_hours for
         # the rest of the hours
         hours_calculator = hours - 1
