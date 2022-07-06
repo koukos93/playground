@@ -1,9 +1,7 @@
 import sqlite3
 import datetime as dt
-import time
 import tkinter.messagebox
 from tkinter import *
-import math
 
 
 def insert_car():
@@ -24,7 +22,7 @@ def insert_car():
     return None
 
 
-def delete_car():
+def delete_car_from_db():
     """
     Remove record from database based on user input
 
@@ -73,7 +71,13 @@ def exit_car_from_garage():
 
 def parking_fee(difference_minutes):
     """
-    Calculates the parking cost
+    Calculates the parking cost\n
+    Rules:\n
+    Minimum charge is: 3$ (up to 15 minutes)\n
+    First hour: 4.5$\n
+    Every other hour: +2$\n
+    We don't charge the first 10 minutes of the hours (except the first hour)\n
+    Up to 15 minutes charge: +1$ (except first hour)
 
     :param difference_minutes: int
 
@@ -91,21 +95,26 @@ def parking_fee(difference_minutes):
         # Variable to subtract the first hour that we already charged and multiply other_hours for
         # the rest of the hours
         hours_calculator = hours - 1
-        # If we have 0 hours and more than 15 minutes, charge is the first hour charge.
+        # If we have 0 hours and more than 15 minutes, fee is the first hour charge.
         if hours_calculator < 0:
             fee = first_hour
             return fee
+        # Charge first hour the first_hour price and then charge every next hour the other_hour charge
         fee = first_hour + hours_calculator * other_hours
+        # first 11 minutes of the hour is free, so we return fee
         if 0 <= minutes < 11:
             return fee
+        # 11 to 15 minutes the charge is first_minutes=1 charge
         elif 11 <= minutes <= 15:
             fee += first_minutes
+        # If minutes are over 15 we add the whole hour charge. other_hours=2.5
         else:
             fee += other_hours
     return fee
 
 
 # --------------------------- GUI-------------------------------#
+# No attention was given on the GUI. 2 simple entry boxes and buttons.
 
 
 root = Tk()
@@ -117,7 +126,7 @@ entry_box.pack()
 enter_button = Button(text="Entry", command=insert_car)
 exit_entry = Entry()
 exit_button = Button(text="Exit", command=lambda: [exit_car_from_garage(),
-                                                   delete_car()])
+                                                   delete_car_from_db()])
 enter_button.pack()
 exit_entry.pack()
 exit_button.pack()
