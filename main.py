@@ -15,6 +15,11 @@ def insert_car():
     time_now = dt.datetime.now().strftime("%Y-%m-%d %H:%M")
     #get user input from entry box and insert record
     plate_num = entry_box.get()
+
+    if len(plate_num) == 0:
+        tkinter.messagebox.showinfo(title="Error",
+                                    message="Cannot enter car without plate number")
+        return
     entry_box.delete(0, "end")
     cursor.execute(f'INSERT INTO customers VALUES ("{plate_num}", "{time_now}")')
     conn.commit()
@@ -29,11 +34,17 @@ def delete_car_from_db():
     :return: None
     """
     car_plate = exit_entry.get()
+    if len(car_plate) == 0:
+        return
     exit_entry.delete(0, "end")
     conn = sqlite3.connect("Cars.db")
     cursor = conn.cursor()
-    if tkinter.messagebox.askokcancel(message="Delete car from garage?"):
-        cursor.execute(f'DELETE from customers WHERE plate_number = "{car_plate}"')
+    try:
+        if tkinter.messagebox.askokcancel(message="Delete car from garage?"):
+            cursor.execute(f'DELETE from customers WHERE plate_number = "{car_plate}"')
+    except TypeError:
+        tkinter.messagebox.showinfo(title="Error",
+                                    message="No car with this plate number")
     conn.commit()
     conn.close()
     return None
@@ -50,19 +61,25 @@ def display_time_price():
     cursor = conn.cursor()
     # get user input from entry box and fetch the record
     car_plate = exit_entry.get()
-    cursor.execute(f'SELECT * FROM customers WHERE plate_number = "{car_plate}"')
-    items = cursor.fetchone()
-
-    # getting the time from database(string) and
-    # converting it to datetime object to be able to compare with current time
-    time_in = dt.datetime.strptime(items[1], "%Y-%m-%d %H:%M")
-    difference = dt.datetime.now() - time_in
-    time_dif_in_minutes = int(difference.total_seconds() / 60)
-    # calculating the time stayed and price and display to the user
-    hours, minutes = divmod(time_dif_in_minutes, 60)
-    tkinter.messagebox.showinfo(title="Time Stayed",
-                                message=f"{hours}h και {minutes}m\n"
-                                        f"Charge: {parking_fee(time_dif_in_minutes)}")
+    try:
+        cursor.execute(f'SELECT * FROM customers WHERE plate_number = "{car_plate}"')
+        items = cursor.fetchone()
+        # getting the time from database(string) and
+        # converting it to datetime object to be able to compare with current time
+        time_in = dt.datetime.strptime(items[1], "%Y-%m-%d %H:%M")
+        difference = dt.datetime.now() - time_in
+        time_dif_in_minutes = int(difference.total_seconds() / 60)
+        # calculating the time stayed and price and display to the user
+        hours, minutes = divmod(time_dif_in_minutes, 60)
+        charge = parking_fee(time_dif_in_minutes)
+        if charge > 20:
+            charge = 20
+        tkinter.messagebox.showinfo(title="Time Stayed",
+                                    message=f"{hours}h και {minutes}m\n"
+                                            f"Charge: {charge}")
+    except TypeError:
+        tkinter.messagebox.showinfo(title="Error",
+                                    message="No car with this plate number")
 
     conn.commit()
     conn.close()
